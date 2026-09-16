@@ -20,13 +20,13 @@ function App() {
 
         const data = await response.json();
 
-        setManglish(data.result);
-        setEnglish(data.result);
+        setManglish(data.manglish);
+        setEnglish(data.english);
 
     } catch (error) {
         console.error("Error:", error);
     }
-  }
+}
 
   return (
     <div className="app">
@@ -49,11 +49,17 @@ function App() {
       <div className="results">
         <div>
           <h2>Manglish</h2>
-          <p>{manglish}</p>
+          <textarea
+              value={manglish}
+              onChange={(e) => setManglish(e.target.value)}
+          />
         </div>
         <div>
           <h2>English</h2>
-          <p>{english}</p>
+          <textarea
+              value={english}
+              onChange={(e) => setEnglish(e.target.value)}
+          />
         </div>
       </div>
     </div>
