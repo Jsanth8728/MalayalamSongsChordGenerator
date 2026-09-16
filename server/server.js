@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import multer from "multer";
 
 dotenv.config({ path: "../.env" });
 
@@ -9,6 +10,34 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+const upload = multer({
+    dest: "uploads/"
+});
+
+app.post("/api/upload", upload.single("audio"), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                error: "No audio file provided"
+            });
+        }
+
+        console.log("Received audio:", req.file.originalname);
+        console.log("Saved as:", req.file.path);
+
+        res.json({
+            message: "Audio uploaded successfully",
+            filename: req.file.originalname
+        });
+
+    } catch (error) {
+        console.error("Upload error:", error);
+
+        res.status(500).json({
+            error: "Something went wrong uploading the audio."
+        });
+    }
+});
 
 console.log("API key loaded:", !!process.env.GEMINI_API_KEY);
 
